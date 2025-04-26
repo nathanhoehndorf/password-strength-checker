@@ -67,11 +67,11 @@ int score_password(const std::string& password) {
     int score = 0;
     int pass_length = password.length();
 
-    if (pass_length >= 6) {
+    if (pass_length >= 10) {
         if (pass_length % 2 == 0) {
-            score += (pass_length / 2) - 1;
+            score += (pass_length / 2)-2;
         } else {
-            score += ((pass_length - 1) / 2) - 1;
+            score += ((pass_length - 1) / 2) - 2;
         }
     }
 
@@ -80,9 +80,9 @@ int score_password(const std::string& password) {
     if (has_lower(password)) score++;
     else score--;
     if (has_digits(password)) score++;
-    else score--;
+    else score-=2;
     if (has_symbol(password)) score++;
-    else score--;
+    else score-=2;
 
     std::unordered_set<std::string> blacklist = load_blacklist("blacklist.txt");
 
