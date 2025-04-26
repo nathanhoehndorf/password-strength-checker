@@ -23,3 +23,19 @@ make # build and compile
 ```
 
 ## Usage
+
+To run the password checker, use:
+```bash
+./password-checker
+```
+You will be prompted to enter a password
+
+Example interaction:
+```bash
+$ ./password-checker
+Enter your password:
+```
+You then type the password you are testing.
+Example output:
+```bash
+Password strength: Strong (score: 10)
