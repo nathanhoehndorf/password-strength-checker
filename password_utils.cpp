@@ -5,6 +5,8 @@
 #include <map>
 #include <regex>
 #include <vector>
+#include <fstream>
+#include <unordered_set>
 
 bool has_upper(const std::string& password) {
     return std::any_of(password.begin(), password.end(), ::isupper);
@@ -24,14 +26,24 @@ bool has_symbol(const std::string& password) {
     });
 }
 
-// change to more verbose list
-bool is_blacklisted(const std::string& password) {
-    std::vector<std::string> blacklist = {
-        "password", "123456", "123456789", "qwerty", "abc123", "letmein", "admin"
-    };
+
+std::unordered_set<std::string> load_blacklist(const std::string& filename) {
+    std::unordered_set<std::string> blacklist;
+    std::ifstream file(filename);
+    std::string line;
+    while (std::getline(file, line)) {
+        if (!line.empty()) {
+            std::transform(line.begin(), line.end(), line.begin(), ::tolower);
+            blacklist.insert(line);
+        }
+    }
+    return blacklist;
+}
+
+bool is_blacklisted(const std::string& password, const std::unordered_set<std::string>& blacklist) {
     std::string lower_pw = password;
     std::transform(lower_pw.begin(), lower_pw.end(), lower_pw.begin(), ::tolower);
-    return std::find(blacklist.begin(), blacklist.end(), lower_pw) != blacklist.end();
+    return blacklist.find(lower_pw) != blacklist.end();
 }
 
 bool has_common_pattern(const std::string& password) {
@@ -72,7 +84,9 @@ int score_password(const std::string& password) {
     if (has_symbol(password)) score++;
     else score--;
 
-    if (is_blacklisted(password)) score -= 4;
+    std::unordered_set<std::string> blacklist = load_blacklist("blacklist.txt");
+
+    if (is_blacklisted(password, blacklist)) return 0;
     if (has_common_pattern(password)) score -= 1;
 
     double entropy = calculate_entropy(password);
