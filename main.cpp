@@ -6,13 +6,6 @@
 
 using namespace std;
 
-
-string password_classification(int score) {
-    if (score >= 7) return "Strong";
-    if (score >= 4) return "Medium";
-    return "Weak";
-}
-
 int main() {
     
     string password;
