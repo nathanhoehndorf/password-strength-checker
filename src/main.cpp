@@ -1,5 +1,5 @@
-#include "password_utils.h"
-#include "terminal_io.h"
+#include "../include/password_utils.h"
+#include "../include/terminal_io.h"
 
 #include <iostream>
 #include <string>
